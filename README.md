@@ -4,6 +4,8 @@
 
 Bravado is a workflow and starter renderer for short product films with strong typography, purposeful diagrams, choreographed transitions, and synchronized original sound. Give the agent a project website or GitHub repository. It studies the actual product, writes a seven-scene brief, creates a storyboard, and produces a reviewed MP4.
 
+The installable agent skill is in [`skill/`](skill/SKILL.md). The copy in this repository includes a bootstrap starter and fetches verified fonts during setup. The personal Bravado skill is also installed in the user's skill directory.
+
 The included Cadence example reproduces the production approach behind a 31-second product intro. The template is a starting grammar, not a claim that arbitrary project links can be transformed into a finished film without editorial decisions. For a different product, the agent changes the metaphor, scene graphics, copy, and numerical logic to fit the source.
 
 ## Quick start
