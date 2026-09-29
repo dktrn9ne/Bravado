@@ -1,0 +1,24 @@
+{
+  "source": "https://github.com/dktrn9ne/Bravado",
+  "accessed": "2026-09-29",
+  "status": "Product pitch for the existing agent skill, workflow, and starter renderer. Visual identity is a proposed direction for this film.",
+  "title": "Bravado — Show the work",
+  "tagline": "You built it, you shipped it, now show your Bravado.",
+  "format": "1920x1080, 30 fps, 31 seconds, original synthesized sound",
+  "scenes": [
+    {"time": "0–3", "job": "Hook", "copy": "YOU BUILT IT. / YOU SHIPPED IT.", "motion": "Two heavy type strikes create the first two beats."},
+    {"time": "3–7.5", "job": "Problem", "copy": "The work is real. / Make it felt.", "motion": "A static project card breaks into story ingredients."},
+    {"time": "7.5–12", "job": "Input", "copy": "START WITH A LINK.", "motion": "A site or repo link resolves into source, product, and visual cues."},
+    {"time": "12–17.5", "job": "Craft", "copy": "TYPE. MOTION. SOUND.", "motion": "Kinetic type, causal paths, and a sound waveform join on the same playhead."},
+    {"time": "17.5–23", "job": "Story", "copy": "SEVEN SCENES. / ONE CLEAR STORY.", "motion": "Seven editorial beats advance in order and assemble a film strip."},
+    {"time": "23–27", "job": "Output", "copy": "READY TO SHOW.", "motion": "Storyboard, editable source, and MP4 appear as reviewable outputs."},
+    {"time": "27–31", "job": "Brand", "copy": "BRAVADO", "motion": "Elements converge into the wordmark and exact tagline."}
+  ],
+  "claims": [
+    "Accepts a project website or GitHub repository",
+    "Agent researches the source and writes a seven-scene brief",
+    "Starter renderer produces storyboard, MP4, and original sound",
+    "Source remains editable in the repository"
+  ],
+  "design": {"ink": "#141820", "paper": "#F1F0E8", "violet": "#656BFF", "lime": "#D9FC6B", "gray": "#838998", "white": "#FFFFFF"}
+}
