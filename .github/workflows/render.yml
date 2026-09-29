@@ -1,0 +1,42 @@
+name: Render Bravado film
+on:
+  workflow_dispatch:
+    inputs:
+      brief:
+        description: Project brief JSON path
+        required: true
+        default: projects/cadence.json
+  push:
+    branches: [main]
+    paths:
+      - render.py
+      - projects/**
+      - fonts/**
+      - requirements.txt
+      - .github/workflows/render.yml
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - run: python -m pip install -r requirements.txt
+      - run: python setup_fonts.py
+      - name: Render and verify
+        env:
+          BRIEF: ${{ inputs.brief || 'projects/cadence.json' }}
+        run: |
+          python render.py --brief "$BRIEF" --out output
+          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1 output/*-bravado.mp4
+          ffmpeg -v error -i output/*-bravado.mp4 -f null -
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bravado-film
+          path: |
+            output/*-bravado.mp4
+            output/sound-design.wav
+            output/review/**
