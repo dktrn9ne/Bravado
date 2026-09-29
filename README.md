@@ -34,6 +34,18 @@ Or:
 
 > Use Bravado on https://github.com/owner/repo. Inspect its README and app if available. Establish what's working now, then write and render a launch video.
 
+## Bravado pitches itself
+
+The [Bravado pitch brief](projects/bravado_pitch.json) and [editable film source](projects/bravado_pitch.py) use this repository as the project input. The film makes the workflow tangible through seven scenes: shipped work, source link, research, motion craft, editorial sequence, reviewable outputs, and the brand. Its dark ink, ultraviolet, and lime identity is a proposed visual direction for this pitch.
+
+```bash
+python projects/bravado_pitch.py --stills
+# Review output/bravado-pitch/review/storyboard.jpg
+python projects/bravado_pitch.py
+```
+
+The finished cut is `output/bravado-pitch/bravado-product-pitch.mp4` with an original stereo sound stem. The example URL shown onscreen is illustrative, not a submission form or live service. The project is an agent-guided workflow and renderer, not a one-click hosted video generator.
+
 ## Quality standard
 
 - One proposition per scene; no tiny paragraphs posing as motion design.
