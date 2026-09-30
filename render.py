@@ -4,6 +4,7 @@ import argparse, json, math, subprocess, wave
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from functools import lru_cache
+from brief import load_brief
 
 ROOT=Path(__file__).resolve().parent
 W,H=1920,1080
@@ -17,23 +18,7 @@ BRIEF=None
 OUT=None
 
 def cfg(path):
-    raw=json.loads(Path(path).read_text())
-    for k in ['brand','story','example','palette']:
-        if k not in raw:raise ValueError(f'Missing brief field: {k}')
-    for k in ['name','tagline','url','cta','eyebrow']:
-        if not raw['brand'].get(k):raise ValueError(f'Missing brand.{k}')
-    for k in ['opening','wait','shift','cadence','flow','proof']:
-        if k not in raw['story']:raise ValueError(f'Missing story.{k}')
-    for k in ['forest','dark','clay','cream','sun','stone','line','muted']:
-        v=raw['palette'].get(k,'')
-        if len(v)!=7 or not v.startswith('#'):raise ValueError(f'Invalid palette.{k}')
-        int(v[1:],16)
-    e=raw['example']
-    if not 1<=int(e['period_days'])<=14:raise ValueError('period_days must be 1..14')
-    if not 1<=int(e['interval_seconds'])<=3600:raise ValueError('interval_seconds must be 1..3600')
-    if float(e['weekly_total'])<0:raise ValueError('weekly_total must be nonnegative')
-    if len(raw['story']['flow']['audiences'])!=3:raise ValueError('Supply three audience cards')
-    return raw
+    return load_brief(path)
 
 def load(path,out):
     global BRIEF, OUT, FOREST,DARK,CLAY,CREAM,SUN,STONE,LINE,MUTED
@@ -57,15 +42,17 @@ def font(sz,kind='bold'):
 def xy(box):return tuple(round(v*S) for v in box)
 
 class Canvas:
-    def __init__(self,bg=CREAM):self.im=Image.new('RGB',(W,H),bg);self.d=ImageDraw.Draw(self.im)
-    def text(self,x,y,s,size=24,color=FOREST,kind='bold',anchor=None):
+    def __init__(self,bg=None):self.im=Image.new('RGB',(W,H),CREAM if bg is None else bg);self.d=ImageDraw.Draw(self.im)
+    def text(self,x,y,s,size=24,color=None,kind='bold',anchor=None):
+        color=FOREST if color is None else color
         self.d.text((round(x*S),round(y*S)),s,font=font(size,kind),fill=color,anchor=anchor,stroke_width=0)
-    def line(self,pts,color=FOREST,width=1):self.d.line([xy(p) for p in pts],fill=color,width=max(1,round(width*S)),joint='curve')
+    def line(self,pts,color=None,width=1):self.d.line([xy(p) for p in pts],fill=FOREST if color is None else color,width=max(1,round(width*S)),joint='curve')
     def rect(self,box,fill=None,outline=None,r=0,width=1):
         self.d.rounded_rectangle(xy(box),radius=round(r*S),fill=fill,outline=outline,width=max(1,round(width*S)))
     def circle(self,x,y,r,fill=None,outline=None,width=1):self.d.ellipse(xy((x-r,y-r,x+r,y+r)),fill=fill,outline=outline,width=max(1,round(width*S)))
-    def label(self,x,y,s,color=MUTED,size=11):self.text(x,y,s,size,color,'mono')
-    def reveal(self,x,y,s,local,delay=0,size=52,color=FOREST,kind='bold'):
+    def label(self,x,y,s,color=None,size=11):self.text(x,y,s,size,MUTED if color is None else color,'mono')
+    def reveal(self,x,y,s,local,delay=0,size=52,color=None,kind='bold'):
+        color=FOREST if color is None else color
         p=ease((local-delay)/.65)
         if p<=0:return
         available=(1280-x-64)*S
@@ -73,11 +60,13 @@ class Canvas:
         height=int((size*1.4)*S); layer=Image.new('RGBA',(W,height),(0,0,0,0));d=ImageDraw.Draw(layer)
         d.text((0,int((1-p)*(size*1.4)*S)),s,font=font(size,kind),fill=color)
         self.im.paste(layer,(round(x*S),round(y*S)),layer)
-    def reveal_center(self,y,s,local,delay=0,size=52,color=CREAM,kind='bold'):
+    def reveal_center(self,y,s,local,delay=0,size=52,color=None,kind='bold'):
+        color=CREAM if color is None else color
         while self.d.textlength(s,font=font(size,kind))>1050*S and size>15:size-=1
         x=(1280-self.d.textlength(s,font=font(size,kind))/S)/2
         self.reveal(x,y,s,local,delay,size,color,kind)
-    def logo(self,x,y,size=36,color=FOREST):
+    def logo(self,x,y,size=36,color=None):
+        color=FOREST if color is None else color
         if b('brand').get('mark_style')!='triple_arc':
             self.circle(x,y,size*.46,outline=color,width=2)
             self.text(x,y-size*.29,b('brand').get('monogram',b('brand','name')[0])[:1],size*.56,color,'heavy',anchor='mt')
@@ -95,10 +84,11 @@ class Canvas:
         self.line([(64,665),(64+1152*t/31,665)],CLAY,2)
         self.label(64,682,b('brand','eyebrow').upper(),size=10)
         self.text(1216,682,b('brand','footer').upper(),10,MUTED,'mono',anchor='ra')
-    def pill(self,x,y,s,bg=FOREST,fg=CREAM):
+    def pill(self,x,y,s,bg=None,fg=None):
+        bg=FOREST if bg is None else bg;fg=CREAM if fg is None else fg
         length=self.d.textlength(s,font=font(11,'mono'))/S
         self.rect((x,y,x+length+24,y+29),bg,r=4);self.label(x+12,y+7,s,fg)
-    def check(self,x,y,color=CLAY):self.line([(x-6,y),(x-1,y+5),(x+8,y-6)],color,2)
+    def check(self,x,y,color=None):self.line([(x-6,y),(x-1,y+5),(x+8,y-6)],CLAY if color is None else color,2)
 
 def pulse_points(x,y,width,height,phase=0):
     pts=[]
@@ -325,7 +315,13 @@ def main():
     parser.add_argument('--brief',default='projects/cadence.json')
     parser.add_argument('--out',default='output')
     parser.add_argument('--stills',action='store_true')
-    args=parser.parse_args();load(args.brief,args.out)
+    parser.add_argument('--validate-only',action='store_true',help='Check brief without loading fonts or rendering')
+    args=parser.parse_args()
+    try:cfg(args.brief)
+    except (ValueError, OSError) as exc:parser.error(str(exc))
+    if args.validate_only:
+        print('Brief valid');return
+    load(args.brief,args.out)
     (OUT/'review').mkdir(exist_ok=True)
     times=[1.8,6.2,10,15.8,20.6,25.5,29.5]
     for sec in times:frame(sec).save(OUT/'review'/f'frame-{sec}.jpg',quality=90)
@@ -335,6 +331,10 @@ def main():
         im=Image.open(OUT/'review'/f'frame-{sec}.jpg').resize((640,360))
         x=i%2*640;y=i//2*384;contact.paste(im,(x,y));dc.text((x+10,y+365),f'{sec:.1f} s',font=font(10,'mono'),fill=FOREST)
     contact.save(OUT/'review'/'storyboard.jpg',quality=90)
+    # Check both sides and the middle of every wipe, plus the final frame.
+    boundary_frames=sorted({round(cut*FPS)+offset for cut in CUTS[1:-1] for offset in (-1,0,5,11)} | {FPS*DURATION-1})
+    for index in boundary_frames:
+        frame(index/FPS).save(OUT/'review'/f'boundary-{index:04d}.jpg',quality=90)
     if args.stills:return
     make_audio()
     name=''.join(ch.lower() if ch.isalnum() else '-' for ch in b('brand','name')).strip('-')
