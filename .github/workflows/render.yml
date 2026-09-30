@@ -6,10 +6,17 @@ on:
         description: Project brief JSON path
         required: true
         default: projects/cadence.json
+  pull_request:
+    branches: [main]
   push:
     branches: [main]
     paths:
       - render.py
+      - brief.py
+      - verify_export.py
+      - tests/**
+      - skill/assets/starter/**
+      - setup_fonts.py
       - projects/**
       - fonts/**
       - requirements.txt
@@ -25,14 +32,14 @@ jobs:
           python-version: '3.11'
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - run: python -m pip install -r requirements.txt
+      - run: python -m unittest discover -s tests -v
       - run: python setup_fonts.py
       - name: Render and verify
         env:
           BRIEF: ${{ inputs.brief || 'projects/cadence.json' }}
         run: |
           python render.py --brief "$BRIEF" --out output
-          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1 output/*-bravado.mp4
-          ffmpeg -v error -i output/*-bravado.mp4 -f null -
+          python verify_export.py output/*-bravado.mp4
       - uses: actions/upload-artifact@v4
         with:
           name: bravado-film

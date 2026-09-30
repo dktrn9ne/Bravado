@@ -15,9 +15,11 @@ python -m pip install -r requirements.txt
 python setup_fonts.py
 python inspect_source.py https://example.com --out output/source-notes.json
 # Review facts and adapt projects/cadence.json to your project.
+python render.py --brief projects/cadence.json --validate-only
 python render.py --brief projects/cadence.json --out output --stills
 # Inspect output/review/storyboard.jpg, then render:
 python render.py --brief projects/cadence.json --out output
+python verify_export.py output/cadence-bravado.mp4
 ```
 
 Requires Python 3.10+, FFmpeg, and network access for initial font setup and source inspection. The renderer runs offline after dependencies and fonts are installed. Output: 1920×1080, 30 fps, 31 seconds, H.264 MP4 with AAC stereo audio. It also creates a separate original audio stem and storyboard frames. Output files are ignored by Git.
@@ -66,3 +68,7 @@ The workflow contains the review checklist and branching guidance for repo-only 
 ## Credit and fonts
 
 This template is an original implementation inspired by the supplied Batter Up video. It does not include the reference footage or its audio. `setup_fonts.py` downloads pinned Inter, IBM Plex Mono, and Playfair Display binaries from Google Fonts; their embedded notices are listed in `fonts/NOTICES.txt`. Replace the typefaces where the brand warrants it and honor the applicable font licenses.
+
+## Regression checks
+
+Run `python -m unittest discover -s tests -v` after installing dependencies. These tests cover brief validation, custom palette binding, export-contract rejection, and parity between repository code and the bundled starter. `--validate-only` checks the fixed starter schema without loading fonts or creating output. Storyboards also include transition-boundary images; inspect those before the full export. Automated export verification does not replace watching and listening to the film.
