@@ -16,6 +16,14 @@ description: Create a polished, short product motion film from a project website
 
 ## Produce
 
+**Backend selection:** Use the HyperFrames HTML/GSAP backend when requested,
+or when browser-native typography, SVG, HTML or web media suit the project.
+Follow [the HyperFrames guide](references/hyperframes.md): bootstrap as below,
+then use the copied `hyperframes/` directory. Its default is 1080p, native 60 fps,
+31 seconds. Keep the same evidence, seven-scene beat sheet, transition inspection,
+original sound and full-export review gates. The Python backend below remains
+available. Neither backend's sample diagrams replace product-specific design.
+
 1. Follow [the workflow](references/workflow.md) to write a seven-scene arc and frame-level beat sheet. State one idea per scene. Fit copy to the actual product and choose a graphic metaphor that explains it.
 2. Bootstrap the template with `python scripts/bootstrap.py /absolute/output/directory`, then run `python setup_fonts.py` inside the copied directory. This copies the renderer, sample brief, and dependencies from `assets/starter`. Alternatively use the Bravado repository if the user already has it checked out.
 3. Create a new JSON brief from `projects/cadence.json`. Adapt the code in `render.py` when the product is not a payroll flow: replace day tiles, money counter, wallet cards, and receipts with appropriate data and diagram logic. Do not merely rename Cadence labels.

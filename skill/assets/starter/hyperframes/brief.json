@@ -1,0 +1,17 @@
+{
+  "source": "https://github.com/dktrn9ne/Bravado",
+  "accessed": "2026-10-07",
+  "status": "Demonstration of Bravado's editorial workflow with a HyperFrames rendering backend. Proposed visual identity.",
+  "brand": "BRAVADO",
+  "cta": "github.com/dktrn9ne/Bravado",
+  "palette": { "background": "#141820", "text": "#F1F0E8", "accent": "#D9FC6B" },
+  "scenes": [
+    { "headline": "YOU BUILT IT.", "detail": "You shipped it. Now show the work.", "labels": ["BUILD", "SHIP", "SHOW"] },
+    { "headline": "MAKE IT FELT.", "detail": "Turn working software into a clear product story.", "labels": ["PRODUCT", "AUDIENCE", "STORY"] },
+    { "headline": "START WITH A LINK.", "detail": "Inspect the actual product. Ground every claim.", "labels": ["SOURCE", "EVIDENCE", "BRIEF"] },
+    { "headline": "TYPE. MOTION. SOUND.", "detail": "One timeline. Purposeful movement. Original sound.", "labels": ["TYPE", "MOTION", "SOUND"] },
+    { "headline": "SEVEN SCENES.", "detail": "One idea per scene. One clear story.", "labels": ["HOOK", "SHIFT", "FLOW"] },
+    { "headline": "REVIEW THE FILM.", "detail": "Inspect transitions. Watch the export. Listen to the sound.", "labels": ["STORYBOARD", "EDITABLE SOURCE", "MP4"] },
+    { "headline": "BRAVADO", "detail": "You built it, you shipped it, now show your Bravado.", "labels": ["RESEARCH", "CREATE", "REVIEW"] }
+  ]
+}

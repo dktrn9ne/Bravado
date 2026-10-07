@@ -1,0 +1,17 @@
+{
+  "name": "bravado-hyperframes",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "node build.mjs",
+    "lint": "hyperframes lint",
+    "check": "hyperframes check",
+    "preview": "hyperframes preview",
+    "render": "hyperframes render --fps 60 --quality delivery --output output/bravado-hyperframes.mp4",
+    "verify": "python ../verify_export.py output/bravado-hyperframes.mp4 --fps 60",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": { "gsap": "3.14.2", "hyperframes": "0.8.140" }
+}
