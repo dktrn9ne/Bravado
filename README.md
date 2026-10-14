@@ -10,6 +10,30 @@ The included Cadence example reproduces the production approach behind a 31-seco
 
 ## Quick start
 
+### HyperFrames backend
+
+Bravado also includes an editable HTML/GSAP backend powered by HyperFrames.
+It uses the same seven-scene, 31-second editorial arc, with native 60 fps output
+and an original stereo soundtrack. Requires Node.js 22+, Python 3.10+ for export
+verification, and FFmpeg. See [the integration guide](docs/HYPERFRAMES.md).
+
+```bash
+cd hyperframes
+npm ci
+npm run build
+npm run check
+npm run preview
+# Review the timeline, scene midpoints and cut boundaries before rendering.
+npm run render
+npm run verify
+```
+
+Edit `hyperframes/brief.json` for source, copy, palette, and CTA. Adapt the HTML
+and scene motion in `build.mjs` for product-specific diagrams. The supplied
+Bravado demonstration is a starter treatment, not an automatic product film.
+
+### Python backend
+
 ```bash
 python -m pip install -r requirements.txt
 python setup_fonts.py

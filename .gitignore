@@ -3,3 +3,9 @@ fonts/*.ttf
 __pycache__/
 *.pyc
 .DS_Store
+node_modules/
+hyperframes/assets/
+hyperframes/index.html
+hyperframes/beat-sheet.json
+hyperframes/output/
+.hyperframes/

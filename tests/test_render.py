@@ -32,6 +32,8 @@ class RenderTests(unittest.TestCase):
         render.load(ROOT/'projects/cadence.json',tempfile.gettempdir())
 
     def test_starter_files_match_sources(self):
-        for name in ('render.py','brief.py','verify_export.py','inspect_source.py','setup_fonts.py','requirements.txt','projects/cadence.json'):
+        for name in ('render.py','brief.py','verify_export.py','inspect_source.py','setup_fonts.py','requirements.txt','projects/cadence.json',
+                     'hyperframes/build.mjs','hyperframes/brief.json','hyperframes/package.json',
+                     'hyperframes/package-lock.json','hyperframes/test/build.test.mjs'):
             with self.subTest(name=name):
                 self.assertEqual((ROOT/name).read_bytes(),(ROOT/'skill/assets/starter'/name).read_bytes())
